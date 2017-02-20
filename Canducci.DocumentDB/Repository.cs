@@ -12,6 +12,7 @@ namespace Canducci.DocumentDB
     public abstract class Repository<T> : IRepository<T>
         where T : class, new()
     {
+
         protected ConnectionDocumentDB _connection { get; private set; }        
         protected DocumentClient _doc { get; private set; }
         protected string _collectionName { get; private set; } = "";
@@ -83,23 +84,25 @@ namespace Canducci.DocumentDB
             return await GetAllListAsync(docQuery);
         }
 
-        public IOrderedQueryable Query()
+        public IOrderedQueryable<T> Query()
         {
             return GetOrderedQueryable();
         }
 
         #region _private
+
         private void Initialize(ConnectionDocumentDB connection)
         {
             _connection = connection;
             _doc = _connection.Client;
         }
+
         private IOrderedQueryable<T> GetOrderedQueryable()
         {
             return _doc
-                 .CreateDocumentQuery<T>(GetDocumentUri(),
-                 new FeedOptions { MaxItemCount = -1 });
+                 .CreateDocumentQuery<T>(GetDocumentUri(), new FeedOptions { MaxItemCount = -1 });                 
         }
+
         private async Task<IEnumerable<TDocument>> GetAllListAsync<TDocument>(IDocumentQuery<TDocument> docQuery)
         {
             List<TDocument> _list = new List<TDocument>();
@@ -109,16 +112,18 @@ namespace Canducci.DocumentDB
             }
             return _list.Count == 0 ? null : _list;
         }
-        private Uri GetDocumentCreateUri(string id)
-        {
-            return UriFactory
-                .CreateDocumentUri(_connection.DatabaseName, _collectionName, id);
-        }
+
         private Uri GetDocumentUri()
         {
             return UriFactory
                  .CreateDocumentCollectionUri(_connection.DatabaseName, _collectionName);
         }
+
+        private Uri GetDocumentCreateUri(string id)
+        {
+            return UriFactory
+                .CreateDocumentUri(_connection.DatabaseName, _collectionName, id);
+        }        
 
         #endregion
 

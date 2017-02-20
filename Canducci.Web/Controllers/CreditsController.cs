@@ -1,8 +1,9 @@
 ﻿using Canducci.Web.Models;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-
-namespace Canducci.Web.Controllers
+using Microsoft.Azure.Documents.Linq;
+//using System.Linq;
+//namespace Canducci.Web.Controllers
 {
     public class CreditsController : Controller
     {
@@ -59,7 +60,7 @@ namespace Canducci.Web.Controllers
             try
             {
                 await Repository.UpdateAsync(credit, id);
-                return RedirectToAction("Index");
+                return RedirectToAction("Edit", new { id = credit.Id });
             }
             catch
             {

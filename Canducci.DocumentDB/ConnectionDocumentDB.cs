@@ -3,8 +3,8 @@ using System;
 namespace Canducci.DocumentDB
 {
     public sealed class ConnectionDocumentDB: IDisposable
-    {        
-        public string DatabaseName { get; private set; } = "Todo";
+    {
+        public string DatabaseName { get; private set; }
         public DocumentClient Client { get; private set; }
 
         public ConnectionDocumentDB(string url, string key, string database)
