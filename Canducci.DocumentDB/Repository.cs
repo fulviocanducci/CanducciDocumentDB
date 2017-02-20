@@ -50,9 +50,15 @@ namespace Canducci.DocumentDB
             return (T)((dynamic)doc);
         }
 
+        public async Task<IEnumerable<T>> AllAsync()
+        {
+            return await GetAllListAsync(GetOrderedQueryable()
+                .AsDocumentQuery());
+        }
+
         public async Task<IEnumerable<T>> AllAsync(Expression<Func<T, bool>> where)
         {
-            IDocumentQuery<T> docQuery = GetOrderedQueryableAsync()
+            IDocumentQuery<T> docQuery = GetOrderedQueryable()
                 .Where(where)
                 .AsDocumentQuery();
             return await GetAllListAsync(docQuery);
@@ -60,7 +66,7 @@ namespace Canducci.DocumentDB
 
         public async Task<IEnumerable<T>> AllAsync<TKey>(Expression<Func<T, bool>> where, Expression<Func<T, TKey>> orderBy)
         {
-            IDocumentQuery<T> docQuery = GetOrderedQueryableAsync()
+            IDocumentQuery<T> docQuery = GetOrderedQueryable()
                 .Where(where)
                 .OrderBy(orderBy)
                 .AsDocumentQuery();
@@ -69,7 +75,7 @@ namespace Canducci.DocumentDB
 
         public async Task<IEnumerable<TDocument>> AllAsync<TKey, TDocument>(Expression<Func<T, bool>> where, Expression<Func<T, TKey>> orderBy, Expression<Func<T, TDocument>> select)
         {
-            IDocumentQuery<TDocument> docQuery = GetOrderedQueryableAsync()
+            IDocumentQuery<TDocument> docQuery = GetOrderedQueryable()
                 .Where(where)
                 .OrderBy(orderBy)
                 .Select(select)
@@ -79,7 +85,7 @@ namespace Canducci.DocumentDB
 
         public IOrderedQueryable Query()
         {
-            return GetOrderedQueryableAsync();
+            return GetOrderedQueryable();
         }
 
         #region _private
@@ -88,7 +94,7 @@ namespace Canducci.DocumentDB
             _connection = connection;
             _doc = _connection.Client;
         }
-        private IOrderedQueryable<T> GetOrderedQueryableAsync()
+        private IOrderedQueryable<T> GetOrderedQueryable()
         {
             return _doc
                  .CreateDocumentQuery<T>(GetDocumentUri(),
@@ -125,6 +131,7 @@ namespace Canducci.DocumentDB
                 _doc = null;
             }
         }
+        
         #endregion
 
     }

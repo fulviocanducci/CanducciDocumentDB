@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Canducci.DocumentDB", "Cand
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Canducci.ConsoleApp", "Canducci.ConsoleApp\Canducci.ConsoleApp.csproj", "{4CEB03EB-70F5-4EA8-8794-A6EF4FB40494}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Canducci.Web", "Canducci.Web\Canducci.Web.csproj", "{1C21558D-FA8B-4BB5-9EAF-2D2E5F884173}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{4CEB03EB-70F5-4EA8-8794-A6EF4FB40494}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4CEB03EB-70F5-4EA8-8794-A6EF4FB40494}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4CEB03EB-70F5-4EA8-8794-A6EF4FB40494}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1C21558D-FA8B-4BB5-9EAF-2D2E5F884173}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1C21558D-FA8B-4BB5-9EAF-2D2E5F884173}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1C21558D-FA8B-4BB5-9EAF-2D2E5F884173}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1C21558D-FA8B-4BB5-9EAF-2D2E5F884173}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Canducci.DocumentDB;
 using Canducci.ConsoleApp.Models;
+using System.Configuration;
 
 namespace Canducci.ConsoleApp
 {
@@ -18,8 +16,12 @@ namespace Canducci.ConsoleApp
 
         static async Task<string> GetId()
         {
+            string url = ConfigurationManager.AppSettings["url"];
+            string key = ConfigurationManager.AppSettings["key"];
+            string database = ConfigurationManager.AppSettings["database"];
+
             Credit c = new Credit();
-            using (ConnectionDocumentDB db = new ConnectionDocumentDB())
+            using (ConnectionDocumentDB db = new ConnectionDocumentDB(url, key, database))
             using (RepositoryCarAbstract rep = new RepositoryCar(db))
             using (RepositoryCreditAbstract repc = new RepositoryCredit(db))
             {
