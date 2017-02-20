@@ -42,6 +42,8 @@ item já instalado quando é instalado esse pacote [Canducci DocumentDB](https://w
 
 ##### Código da `Repository`:
 
+A classe `abstract` `RepositoryCreditAbstract` que herda de `Repository` e `IRepository` como contrato, tem um construtor com a classe `ConnectionDocumentDB db` e é chamado a sua base para a passagem da variável `db` e o nome da coleção que no caso é `credit`.
+
 ```csharp
 public abstract class RepositoryCreditAbstract: Repository<Credit>, IRepository<Credit>
 {
@@ -50,7 +52,10 @@ public abstract class RepositoryCreditAbstract: Repository<Credit>, IRepository<
     {
     }
 }
-
+```
+A classe `concret` `RepositoryCredit` herda de `RepositoryCreditAbstract` e também possui um construtor com a classe `ConnectionDocumentDB db` e chama a sua base para a passagem da variável `db`, não precisando passar o segundo paramentro ato feito na classe `abstract` `RepositoryCreditAbstract`.
+_
+```csharp
 public class RepositoryCredit: RepositoryCreditAbstract
 {
     public RepositoryCredit(ConnectionDocumentDB db)
