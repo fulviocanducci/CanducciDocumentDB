@@ -21,7 +21,7 @@ string database = "database";
 ConnectionDocumentDB _db = new ConnectionDocumentDB(url, key, database);
 ```
 
-Apos configurar a classe, precisamos criar uma classe que represente o modelo da coleção e sua respectiva classe `respository`.
+Apos configurar a classe, precisamos criar uma classe que represente o __modelo da coleção__ e sua respectiva classe `respository`.
 
 ##### Código modelo para coleção:
 
@@ -54,7 +54,7 @@ public abstract class RepositoryCreditAbstract: Repository<Credit>, IRepository<
 }
 ```
 
-A classe `concret` `RepositoryCredit` herda de `RepositoryCreditAbstract` e também possui um construtor com a classe `ConnectionDocumentDB db` e chama a sua base para a passagem da variável `db`, não precisando passar o segundo parametro ato feito na classe `abstract` `RepositoryCreditAbstract`.
+A classe `concret` `RepositoryCredit` herda de `RepositoryCreditAbstract` e também possui um `construtor` com a classe `ConnectionDocumentDB db` e chama a sua base para a passagem da variável `db`, não precisando passar o segundo parametro ato feito na classe `abstract` `RepositoryCreditAbstract`.
 
 ```csharp
 public class RepositoryCredit: RepositoryCreditAbstract
@@ -137,18 +137,18 @@ private static void RegisterServices(IKernel kernel)
     kernel.Bind<RepositoryCreditAbstract>().To<RepositoryCredit>();
 }
 ```
-Observação que foi configurado dentro do `Web.config` na chave `appSettings` as configurações de conexão:
+__Observação:__ foi configurado dentro do `Web.config` na chave `appSettings` as configurações de conexão, segue abaixo:
 
 ```xml
 <appSettings>
     ...
-    <add key="url" value="https://localhost:8081/" />
-    <add key="key" value="C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw==" />
-    <add key="database" value="Todo" />
+   <add key="url" value="https://localhost:8081/"/>
+   <add key="key" value="C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw=="/>
+   <add key="database" value="Todo"/>
 </appSettings>
 ```
 
-feito isso a sua aplicação `Web` está preparada para receber injeção de dependencia, como exemplo de um `controller`:
+Feito isso a sua aplicação `Web` está preparada para receber __Injeção de Dependencia__, como por exemplo esse `controller`:
 
 ```csharp
 public class CreditsController : Controller
@@ -235,5 +235,21 @@ public class CreditsController : Controller
     }
 }
 ```
+A partir desse ponto gere todas as `Views` respectivas de cada método, onde o mesmo possibilitará as operações de `CRUD` para essa coleção.
 
-Gere todas as `Views` respectivas de cada método, onde o mesmo possibilitará as operações para essa coleção.
+Um exemplo de um registro gravado dessa coleção:
+
+```xml
+{
+    "id": "d70e21fd-b9e3-430b-a934-778ce3a871b3",
+    "title": "LINGUA PORTUGUESA",
+    "value": 200,
+    "created": "2015-02-28T00:00:00",
+    "active": true,
+    "_rid": "aFh5AITdaQABAAAAAAAAAA==",
+    "_self": "dbs/aFh5AA==/colls/aFh5AITdaQA=/docs/aFh5AITdaQABAAAAAAAAAA==/",
+    "_etag": "\"00001400-0000-0000-0000-58ab120e0000\"",
+    "_attachments": "attachments/",
+    "_ts": 1487606286
+}
+```
