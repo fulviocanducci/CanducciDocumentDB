@@ -15,7 +15,7 @@ namespace Canducci.DocumentDB
 
         protected ConnectionDocumentDB _connection { get; private set; }        
         protected DocumentClient _doc { get; private set; }
-        protected string _collectionName { get; private set; } = "";
+        protected string _collectionName { get; private set; }
 
         public Repository(ConnectionDocumentDB connection)
         {
@@ -100,7 +100,8 @@ namespace Canducci.DocumentDB
         private IOrderedQueryable<T> GetOrderedQueryable()
         {
             return _doc
-                 .CreateDocumentQuery<T>(GetDocumentUri(), new FeedOptions { MaxItemCount = -1 });                 
+                 .CreateDocumentQuery<T>(GetDocumentUri(),
+                 new FeedOptions { MaxItemCount = -1 });                 
         }
 
         private async Task<IEnumerable<TDocument>> GetAllListAsync<TDocument>(IDocumentQuery<TDocument> docQuery)
@@ -108,7 +109,8 @@ namespace Canducci.DocumentDB
             List<TDocument> _list = new List<TDocument>();
             while (docQuery.HasMoreResults)
             {
-                _list.AddRange(await docQuery.ExecuteNextAsync<TDocument>());
+                _list.AddRange(await docQuery
+                    .ExecuteNextAsync<TDocument>());
             }
             return _list.Count == 0 ? null : _list;
         }
@@ -116,13 +118,16 @@ namespace Canducci.DocumentDB
         private Uri GetDocumentUri()
         {
             return UriFactory
-                 .CreateDocumentCollectionUri(_connection.DatabaseName, _collectionName);
+                 .CreateDocumentCollectionUri(_connection.DatabaseName, 
+                 _collectionName);
         }
 
         private Uri GetDocumentCreateUri(string id)
         {
             return UriFactory
-                .CreateDocumentUri(_connection.DatabaseName, _collectionName, id);
+                .CreateDocumentUri(_connection.DatabaseName, 
+                _collectionName, 
+                id);
         }        
 
         #endregion

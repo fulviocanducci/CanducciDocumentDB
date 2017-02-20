@@ -1,13 +1,15 @@
 ﻿using Canducci.Web.Models;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-using Microsoft.Azure.Documents.Linq;
+//using Microsoft.Azure.Documents.Linq;
 //using System.Linq;
-//namespace Canducci.Web.Controllers
+namespace Canducci.Web.Controllers
 {
     public class CreditsController : Controller
     {
+
         protected RepositoryCreditAbstract Repository { get; private set; }
+
         public CreditsController(RepositoryCreditAbstract repository)
         {
             Repository = repository;
@@ -18,13 +20,13 @@ using Microsoft.Azure.Documents.Linq;
             base.Dispose(disposing);
         }
         
-        public async Task<ActionResult> Index()
+        public async Task<ActionResult> Index(int? page)
         {
             return View(await Repository.AllAsync());
         }
                 
         public async Task<ActionResult> Details(string id)
-        {
+        {            
             return View(await Repository.FindAsync(id));
         }
 
@@ -67,7 +69,6 @@ using Microsoft.Azure.Documents.Linq;
                 return View();
             }
         }
-
         
         public async Task<ActionResult> Delete(string id)
         {
@@ -80,7 +81,6 @@ using Microsoft.Azure.Documents.Linq;
             try
             {
                 await Repository.DeleteAsync(id);
-
                 return RedirectToAction("Index");
             }
             catch
