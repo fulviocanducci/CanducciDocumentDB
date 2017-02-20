@@ -1,13 +1,10 @@
 ﻿using Canducci.Web.Models;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-//using Microsoft.Azure.Documents.Linq;
-//using System.Linq;
 namespace Canducci.Web.Controllers
 {
     public class CreditsController : Controller
     {
-
         protected RepositoryCreditAbstract Repository { get; private set; }
 
         public CreditsController(RepositoryCreditAbstract repository)

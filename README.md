@@ -115,3 +115,125 @@ RepositoryCreditAbstract db = new RepositoryCredit(db);
 
 IEnumerable<Credit> creditList = await db.AllAsync();
 ```
+
+___
+
+### Web ASP.Net
+
+Para configurar um aplicação `Web`, é utilizado o [Ninject.MVC5](https://www.nuget.org/packages/Ninject.MVC5/), que ao final da instalação do seu pacote terá um classe a ser configurada na pasta `App_Start` no arquivo `NinjectWebCommon.cs`.
+
+No método `void RegisterServices(IKernel kernel)` faça:
+
+```csharp
+private static void RegisterServices(IKernel kernel)
+{
+    kernel.Bind<ConnectionDocumentDB>()                
+        .ToSelf()
+        .WithConstructorArgument("url", ConfigurationManager.AppSettings["url"])
+        .WithConstructorArgument("key", ConfigurationManager.AppSettings["key"])
+        .WithConstructorArgument("database", ConfigurationManager.AppSettings["database"]);
+
+    kernel.Bind<RepositoryCarAbstract>().To<RepositoryCar>();
+    kernel.Bind<RepositoryCreditAbstract>().To<RepositoryCredit>();
+}
+```
+Observação que foi configurado dentro do `Web.config` na chave `appSettings` as configurações de conexão:
+
+```xml
+<appSettings>
+    ...
+    <add key="url" value="https://localhost:8081/" />
+    <add key="key" value="C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw==" />
+    <add key="database" value="Todo" />
+</appSettings>
+```
+
+feito isso a sua aplicação `Web` está preparada para receber injeção de dependencia, como exemplo de um `controller`:
+
+```csharp
+public class CreditsController : Controller
+{
+    protected RepositoryCreditAbstract Repository { get; private set; }
+
+    public CreditsController(RepositoryCreditAbstract repository)
+    {
+        Repository = repository;
+    }
+    protected override void Dispose(bool disposing)
+    {
+        if (Repository != null) Repository.Dispose();
+        base.Dispose(disposing);
+    }
+        
+    public async Task<ActionResult> Index(int? page)
+    {
+        return View(await Repository.AllAsync());
+    }
+                
+    public async Task<ActionResult> Details(string id)
+    {            
+        return View(await Repository.FindAsync(id));
+    }
+
+    public ActionResult Create()
+    {
+        return View();
+    }
+                
+    [HttpPost]
+    public async Task<ActionResult> Create(Credit credit)
+    {
+        try
+        {
+            credit = await Repository.InsertAsync(credit);
+            if (string.IsNullOrEmpty(credit.Id))
+                return RedirectToAction("Index");
+            return RedirectToAction("Edit", new { id = credit.Id });
+        }
+        catch
+        {
+            return View();
+        }
+    }
+
+    public async Task<ActionResult> Edit(string id)
+    {
+        return View(await Repository.FindAsync(id));
+    }
+
+    [HttpPost]
+    public async Task<ActionResult> Edit(string id, Credit credit)
+    {
+        try
+        {
+            await Repository.UpdateAsync(credit, id);
+            return RedirectToAction("Edit", new { id = credit.Id });
+        }
+        catch
+        {
+            return View();
+        }
+    }
+        
+    public async Task<ActionResult> Delete(string id)
+    {
+        return View(await Repository.FindAsync(id));
+    }
+
+    [HttpPost]
+    public async Task<ActionResult> Delete(string id, Credit credit)
+    {
+        try
+        {
+            await Repository.DeleteAsync(id);
+            return RedirectToAction("Index");
+        }
+        catch
+        {
+            return View();
+        }
+    }
+}
+```
+
+Gere todas as `Views` respectivas de cada método, onde o mesmo possibilitará as operações para essa coleção.
