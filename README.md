@@ -1,3 +1,3 @@
-# CanducciDocumentDB
+# Canducci DocumentDB
 
 Canducci DocumentDB
