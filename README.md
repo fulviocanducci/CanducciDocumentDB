@@ -1,6 +1,6 @@
 ## Canducci DocumentDB Repository
 
-[![NuGet](https://img.shields.io/nuget/v/CanducciDocumentDB.svg?style=plastic&label=version)](https://www.nuget.org/packages/CanducciDocumentDB/)
+[![NuGet Badge](https://buildstats.info/nuget/CanducciDocumentDB)](https://www.nuget.org/packages/CanducciDocumentDB/)
 
 [![Canducci Excel](http://i682.photobucket.com/albums/vv181/parapua/1487622555_database-px-png_zpsqh2d6d60.png)](https://www.nuget.org/packages/CanducciDocumentDB/)
 
