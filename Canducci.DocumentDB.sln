@@ -5,6 +5,8 @@ VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Canducci.DocumentDB", "Canducci.DocumentDB\Canducci.DocumentDB.csproj", "{53A15BAA-318E-4DC0-A3BA-9264F46FED7C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Canducci.ConsoleApp", "Canducci.ConsoleApp\Canducci.ConsoleApp.csproj", "{4CEB03EB-70F5-4EA8-8794-A6EF4FB40494}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{53A15BAA-318E-4DC0-A3BA-9264F46FED7C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{53A15BAA-318E-4DC0-A3BA-9264F46FED7C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{53A15BAA-318E-4DC0-A3BA-9264F46FED7C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4CEB03EB-70F5-4EA8-8794-A6EF4FB40494}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4CEB03EB-70F5-4EA8-8794-A6EF4FB40494}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4CEB03EB-70F5-4EA8-8794-A6EF4FB40494}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4CEB03EB-70F5-4EA8-8794-A6EF4FB40494}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

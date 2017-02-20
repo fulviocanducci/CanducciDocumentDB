@@ -28,10 +28,10 @@ namespace Canducci.DocumentDB
         }
 
         public async Task<T> InsertAsync(T document)
-        {
-            await _doc.CreateDocumentAsync(GetDocumentUri(),
-                document);
-            return document;
+        {            
+           ResourceResponse<Document> result = 
+                await _doc.CreateDocumentAsync(GetDocumentUri(),document);
+            return (T)(dynamic)result.Resource;
         }
 
         public async Task<ResourceResponse<Document>> UpdateAsync(T document, string id)
@@ -112,6 +112,18 @@ namespace Canducci.DocumentDB
         {
             return UriFactory
                  .CreateDocumentCollectionUri(_connection.DatabaseName, _collectionName);
+        }
+
+        #endregion
+
+        #region dispose 
+        public void Dispose()
+        {
+            if (_doc != null)
+            {
+                _doc.Dispose();
+                _doc = null;
+            }
         }
         #endregion
 

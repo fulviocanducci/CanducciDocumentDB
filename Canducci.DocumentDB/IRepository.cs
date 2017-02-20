@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Canducci.DocumentDB
 {
-    public interface IRepository<T>
+    public interface IRepository<T> : IDisposable
         where T : class, new()
     {
         Task<T> InsertAsync(T document);
