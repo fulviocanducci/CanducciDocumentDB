@@ -82,48 +82,48 @@ Com a codificação dessas classes, permite a gravação dessa coleção configurada, 
 - __Inserir coleção__
 
 ```csharp
-ConnectionDocumentDB _db = new ConnectionDocumentDB(url, key, database);
-RepositoryCreditAbstract db = new RepositoryCredit(db);
+ConnectionDocumentDB db = new ConnectionDocumentDB(url, key, database);
+RepositoryCreditAbstract rep = new RepositoryCredit(db);
 Credit credit = new Credit { Description = "Matemática" };
-credit = await db.InsertAsync(credit);
+credit = await rep.InsertAsync(credit);
 ```
 
 - __Atualizar coleção__
 
 ```csharp
-ConnectionDocumentDB _db = new ConnectionDocumentDB(url, key, database);
-RepositoryCreditAbstract db = new RepositoryCredit(db);
+ConnectionDocumentDB db = new ConnectionDocumentDB(url, key, database);
+RepositoryCreditAbstract rep = new RepositoryCredit(db);
 
-Credit credit = db.FindAsync("d70e21fd-b9e3-430b-a934-778ce3a871b3");
+Credit credit = await rep.FindAsync("d70e21fd-b9e3-430b-a934-778ce3a871b3");
 credit.Description = "História";
-await db.UpdateAsync(credit);
+await rep.UpdateAsync(credit);
 ```
 
 - __Excluir uma coleção__
 
 ```csharp
-ConnectionDocumentDB _db = new ConnectionDocumentDB(url, key, database);
-RepositoryCreditAbstract db = new RepositoryCredit(db);
+ConnectionDocumentDB db = new ConnectionDocumentDB(url, key, database);
+RepositoryCreditAbstract rep = new RepositoryCredit(db);
 
-await db.DeleteAsync("d70e21fd-b9e3-430b-a934-778ce3a871b3");
+await rep.DeleteAsync("d70e21fd-b9e3-430b-a934-778ce3a871b3");
 ```
 
 - __Trazer uma coleção pelo `Id`__
 
 ```csharp
-ConnectionDocumentDB _db = new ConnectionDocumentDB(url, key, database);
-RepositoryCreditAbstract db = new RepositoryCredit(db);
+ConnectionDocumentDB db = new ConnectionDocumentDB(url, key, database);
+RepositoryCreditAbstract rep = new RepositoryCredit(db);
 
-Credit credit = await db.FindAsync("d70e21fd-b9e3-430b-a934-778ce3a871b3");
+Credit credit = await rep.FindAsync("d70e21fd-b9e3-430b-a934-778ce3a871b3");
 ```
 
 - __Trazer todos as coleções__
 
 ```csharp
-ConnectionDocumentDB _db = new ConnectionDocumentDB(url, key, database);
-RepositoryCreditAbstract db = new RepositoryCredit(db);
+ConnectionDocumentDB db = new ConnectionDocumentDB(url, key, database);
+RepositoryCreditAbstract rep = new RepositoryCredit(db);
 
-IEnumerable<Credit> creditList = await db.AllAsync();
+IEnumerable<Credit> creditList = await rep.AllAsync();
 ```
 
 ___
