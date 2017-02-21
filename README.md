@@ -79,7 +79,7 @@ public class RepositoryCredit: RepositoryCreditAbstract
 Com a codificação dessas classes, permite a gravação dessa coleção configurada, onde a estrutura possui os seguintes métodos:
 
 
-- Inserir coleção
+- __Inserir coleção__
 
 ```csharp
 ConnectionDocumentDB _db = new ConnectionDocumentDB(url, key, database);
@@ -88,7 +88,7 @@ Credit credit = new Credit { Description = "Matemática" };
 credit = await db.InsertAsync(credit);
 ```
 
-- Atualizar coleção
+- __Atualizar coleção__
 
 ```csharp
 ConnectionDocumentDB _db = new ConnectionDocumentDB(url, key, database);
@@ -99,7 +99,7 @@ credit.Description = "História";
 await db.UpdateAsync(credit);
 ```
 
-- Excluir uma coleção
+- __Excluir uma coleção__
 
 ```csharp
 ConnectionDocumentDB _db = new ConnectionDocumentDB(url, key, database);
@@ -108,7 +108,7 @@ RepositoryCreditAbstract db = new RepositoryCredit(db);
 await db.DeleteAsync("d70e21fd-b9e3-430b-a934-778ce3a871b3");
 ```
 
-- Trazer uma coleção pelo `Id`
+- __Trazer uma coleção pelo `Id`__
 
 ```csharp
 ConnectionDocumentDB _db = new ConnectionDocumentDB(url, key, database);
@@ -117,7 +117,7 @@ RepositoryCreditAbstract db = new RepositoryCredit(db);
 Credit credit = await db.FindAsync("d70e21fd-b9e3-430b-a934-778ce3a871b3");
 ```
 
-- Trazer todos as coleções
+- __Trazer todos as coleções__
 
 ```csharp
 ConnectionDocumentDB _db = new ConnectionDocumentDB(url, key, database);
