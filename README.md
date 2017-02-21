@@ -142,9 +142,9 @@ __Observação:__ foi configurado dentro do `Web.config` na chave `appSettings` as
 ```xml
 <appSettings>
     ...
-   <add key="url" value="https://localhost:8081/"/>
-   <add key="key" value="C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw=="/>
-   <add key="database" value="Todo"/>
+ <add key="url" value="https://localhost:8081/"/>
+ <add key="key" value="C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw=="/>
+ <add key="database" value="Todo"/>
 </appSettings>
 ```
 
