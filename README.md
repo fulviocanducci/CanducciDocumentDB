@@ -4,6 +4,16 @@
 
 [![Canducci Excel](http://i682.photobucket.com/albums/vv181/parapua/1487622555_database-px-png_zpsqh2d6d60.png)](https://www.nuget.org/packages/CanducciDocumentDB/)
 
+### Instalação:
+
+A instalação pode ser feito pelo [Package Manager Console](https://docs.microsoft.com/en-us/nuget/tools/package-manager-console)
+
+```csharp
+PM> Install-Package CanducciDocumentDB
+```
+
+ou então [Nuget](https://www.nuget.org/packages/CanducciDocumentDB/)
+
 ### Configurações:
 
 Configure a classe `ConnectionDocumentDB` que tem um construtor com três paramentros:
