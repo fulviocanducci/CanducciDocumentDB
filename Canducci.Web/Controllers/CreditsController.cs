@@ -19,7 +19,7 @@ namespace Canducci.Web.Controllers
         
         public async Task<ActionResult> Index(int? page)
         {
-            await Repository.GetOrCreateDocumentCollectionIfNotExists();
+            await Repository.GetOrCreateDocumentCollectionIfNotExists();            
             return View(await Repository.AllAsync());
         }
                 

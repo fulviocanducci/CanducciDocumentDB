@@ -1,20 +1,27 @@
-﻿{
+{
   "dependencies": {
     "Microsoft.NETCore.Portable.Compatibility": "1.0.1",
     "NETStandard.Library": "1.6.1",
-    "Newtonsoft.Json": "9.0.1",    
-    "Microsoft.Azure.DocumentDB.Core": "*", 
+    "Newtonsoft.Json": "9.0.1",
+    "Microsoft.Azure.DocumentDB.Core": "*",
     "System.Linq": "4.3.0",
     "System.Linq.Expressions": "4.3.0",
     "System.Runtime": "4.3.0"
   },
   "description": "Canducci DocumentDB Core",
   "frameworks": {
+    "netcoreapp1.0": {
+      "imports": [
+        "dotnet5.6",
+        "dnxcore50",
+        "portable-net45+win8",
+        "net451"
+      ]
+    },
     "netcoreapp1.6": {
       "imports": [
-        "dnxcore50",
-        "dnx451",
-        "net451"
+        "dotnet5.6",
+        "portable-net45+win8"
       ]
     }
   },
