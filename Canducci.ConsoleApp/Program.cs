@@ -24,8 +24,7 @@ namespace Canducci.ConsoleApp
             using (ConnectionDocumentDB db = new ConnectionDocumentDB(url, key, database))
             using (RepositoryCarAbstract rep = new RepositoryCar(db))
             using (RepositoryCreditAbstract repc = new RepositoryCredit(db))
-            {
-                
+            {                
                 c.Description = "Uol.com.br";
                 c = await repc.InsertAsync(c);
 

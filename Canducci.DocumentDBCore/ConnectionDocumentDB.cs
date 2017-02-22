@@ -11,15 +11,13 @@ namespace Canducci.DocumentDBCore
 
         public ConnectionDocumentDB(string url, string key, string database)
         {
-            ConnectionPolicy ConnectionPolicy = new ConnectionPolicy { EnableEndpointDiscovery = false };            
+            ConnectionPolicy ConnectionPolicy = new ConnectionPolicy
+            {
+                EnableEndpointDiscovery = false                
+            };            
             Client = new DocumentClient(new Uri(url), key, ConnectionPolicy);
             DatabaseName = database;         
-        }        
-
-        //public async Task<Database> GetOrCreateDatabaseIfNotExists()
-        //{
-        //    return await Client.CreateDatabaseIfNotExistsAsync(new Database { Id = DatabaseName });
-        //}
+        }      
 
         public void Dispose()
         {
@@ -29,6 +27,11 @@ namespace Canducci.DocumentDBCore
                 Client = null;
             }
         }
+
+        //public async Task<Database> GetOrCreateDatabaseIfNotExists()
+        //{
+        //    return await Client.CreateDatabaseIfNotExistsAsync(new Database { Id = DatabaseName });
+        //}
 
     }
 }

@@ -16,12 +16,7 @@ namespace Canducci.DocumentDB
             Client = new DocumentClient(new Uri(url), key, ConnectionPolicy);
             DatabaseName = database;         
         }        
-
-        //public async Task<Database> GetOrCreateDatabaseIfNotExists()
-        //{
-        //    return await Client.CreateDatabaseIfNotExistsAsync(new Database { Id = DatabaseName });
-        //}
-
+        
         public void Dispose()
         {
             if (Client != null)
@@ -30,6 +25,11 @@ namespace Canducci.DocumentDB
                 Client = null;
             }
         }
+
+        //public async Task<Database> GetOrCreateDatabaseIfNotExists()
+        //{
+        //    return await Client.CreateDatabaseIfNotExistsAsync(new Database { Id = DatabaseName });
+        //}
 
     }
 }

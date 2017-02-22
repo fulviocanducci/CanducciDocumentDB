@@ -12,12 +12,13 @@ namespace Canducci.DocumentDB
     public abstract class Repository<T> : IRepository<T>
         where T : class, new()
     {
-
         private ConnectionDocumentDB connection { get; set; }
         private DocumentClient documentClient { get; set; }
         private DocumentCollection documentCollection { get; set; }
         private string collectionName { get; set; }
 
+        #region construct
+        
         public Repository(ConnectionDocumentDB connection)
         {
             Initialize(connection);            
@@ -29,11 +30,15 @@ namespace Canducci.DocumentDB
             Initialize(connection);
         }
 
+        #endregion
+
+        #region crud
+
         public async Task<T> InsertAsync(T document)
         {
             ResourceResponse<Document> result =
                  await documentClient.CreateDocumentAsync(GetDocumentUri(), document);
-
+            
             return (T)(dynamic)result.Resource;
         }
 
@@ -54,6 +59,45 @@ namespace Canducci.DocumentDB
             return (T)((dynamic)doc);
         }
 
+        #endregion
+
+        #region all       
+
+        public IEnumerable<T> All()
+        {
+            return GetOrderedQueryable()
+                .ToList();
+        }
+
+        public IEnumerable<T> All(Expression<Func<T, bool>> where)
+        {
+            return GetOrderedQueryable()
+                .Where(where)
+                .ToList();
+        }
+
+        public IEnumerable<T> All<TKey>(Expression<Func<T, bool>> where, Expression<Func<T, TKey>> orderBy)
+        {
+            return GetOrderedQueryable()
+                .Where(where)
+                .OrderBy(orderBy)
+                .ToList();
+        }
+
+        public IEnumerable<TDocument> All<TKey, TDocument>(Expression<Func<T, bool>> where, Expression<Func<T, TKey>> orderBy, Expression<Func<T, TDocument>> select)
+        {
+            return GetOrderedQueryable()
+                .Where(where)
+                .OrderBy(orderBy)
+                .Select(select)
+                .ToList();
+        }
+
+        #endregion
+
+        #region allAsync
+
+        
         public async Task<IEnumerable<T>> AllAsync()
         {
             return await GetAllListAsync(GetOrderedQueryable()
@@ -90,21 +134,18 @@ namespace Canducci.DocumentDB
             return await GetAllListAsync(docQuery);
         }
 
+        #endregion
+
+        #region query
+
         public IOrderedQueryable<T> Query()
         {
             return GetOrderedQueryable();
         }
 
-        //public async Task<DocumentCollection> GetOrCreateDocumentCollectionIfNotExists()
-        //{
-        //    Database database = await connection.GetOrCreateDatabaseIfNotExists();
-        //    documentCollection = await documentClient
-        //        .CreateDocumentCollectionIfNotExistsAsync(database.SelfLink,
-        //        new DocumentCollection { Id = collectionName });
-        //    return documentCollection;
-        //}
+        #endregion
 
-        #region _private        
+        #region private        
 
         private void Initialize(ConnectionDocumentDB conn)
         {
@@ -153,8 +194,16 @@ namespace Canducci.DocumentDB
                 documentClient = null;
             }
         }
-        
+
         #endregion dispose
 
+        //public async Task<DocumentCollection> GetOrCreateDocumentCollectionIfNotExists()
+        //{
+        //    Database database = await connection.GetOrCreateDatabaseIfNotExists();
+        //    documentCollection = await documentClient
+        //        .CreateDocumentCollectionIfNotExistsAsync(database.SelfLink,
+        //        new DocumentCollection { Id = collectionName });
+        //    return documentCollection;
+        //}
     }
 }
