@@ -1,13 +1,10 @@
-﻿using Microsoft.Azure.Documents;
-using Microsoft.Azure.Documents.Client;
+﻿using Microsoft.Azure.Documents.Client;
 using System;
-using System.Threading.Tasks;
 
 namespace Canducci.DocumentDBCore
 {
     public sealed class ConnectionDocumentDB: IDisposable
     {
-
         public string DatabaseName { get; private set; }
         public DocumentClient Client { get; private set; }        
         public ConnectionPolicy ConnectionPolicy { get; private set; }
@@ -19,10 +16,10 @@ namespace Canducci.DocumentDBCore
             DatabaseName = database;         
         }        
 
-        public async Task<Database> GetOrCreateDatabaseIfNotExists()
-        {
-            return await Client.CreateDatabaseIfNotExistsAsync(new Database { Id = DatabaseName });
-        }
+        //public async Task<Database> GetOrCreateDatabaseIfNotExists()
+        //{
+        //    return await Client.CreateDatabaseIfNotExistsAsync(new Database { Id = DatabaseName });
+        //}
 
         public void Dispose()
         {

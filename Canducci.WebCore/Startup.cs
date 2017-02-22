@@ -35,6 +35,9 @@ namespace Canducci.WebCore
             // Add framework services.
             services.AddApplicationInsightsTelemetry(Configuration);
 
+            // Add Options
+            services.AddOptions();
+
             // Add Mvc.
             services.AddMvc();
 
@@ -48,6 +51,17 @@ namespace Canducci.WebCore
                 p => new ConnectionDocumentDB(url, key, database);
             services.AddScoped(co);
             services.AddScoped<RepositoryJornalAbstract, RepositoryJornal>();
+
+            //IConfigurationSection config = Configuration.GetSection("DocumentDB");
+            //var url = config.GetValue<string>("url");
+            //var key = config.GetValue<string>("key");
+            //var database = config.GetValue<string>("database");
+            //services.Configure<ConfigurationDocumentDB>(o =>
+            //{
+            //    o.Url = url;
+            //    o.Key = key;
+            //    o.Database = database;
+            //});
 
         }
 
