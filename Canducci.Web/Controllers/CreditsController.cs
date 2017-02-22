@@ -10,16 +10,10 @@ namespace Canducci.Web.Controllers
         public CreditsController(RepositoryCreditAbstract repository)
         {
             Repository = repository;            
-        }
-        protected override void Dispose(bool disposing)
-        {
-            if (Repository != null) Repository.Dispose();
-            base.Dispose(disposing);
-        }
+        }        
         
         public async Task<ActionResult> Index(int? page)
-        {
-            await Repository.GetOrCreateDocumentCollectionIfNotExists();            
+        {                    
             return View(await Repository.AllAsync());
         }
                 

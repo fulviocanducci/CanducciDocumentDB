@@ -76,7 +76,7 @@ public class RepositoryCredit: RepositoryCreditAbstract
 } 
 ```
 
-Com a codificação dessas classes, permite a gravação dessa coleção configurada, onde a estrutura possui os seguintes métodos:
+Com a codificação dessas classes, permite a gravação dessa coleção configurada (vale lembrar que a criação do `DatabaseId` e `CollectionId` e manual, então, entre no Azure e configure essas duas informações), onde a estrutura possui os seguintes métodos:
 
 
 - __Inserir coleção__
@@ -169,12 +169,7 @@ public class CreditsController : Controller
     {
         Repository = repository;
     }
-    protected override void Dispose(bool disposing)
-    {
-        if (Repository != null) Repository.Dispose();
-        base.Dispose(disposing);
-    }
-        
+    
     public async Task<ActionResult> Index(int? page)
     {
         return View(await Repository.AllAsync());

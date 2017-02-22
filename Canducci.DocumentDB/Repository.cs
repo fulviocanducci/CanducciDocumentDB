@@ -95,14 +95,14 @@ namespace Canducci.DocumentDB
             return GetOrderedQueryable();
         }
 
-        public async Task<DocumentCollection> GetOrCreateDocumentCollectionIfNotExists()
-        {
-            Database database = await connection.GetOrCreateDatabaseIfNotExists();
-            documentCollection = await documentClient
-                .CreateDocumentCollectionIfNotExistsAsync(database.SelfLink,
-                new DocumentCollection { Id = collectionName });
-            return documentCollection;
-        }
+        //public async Task<DocumentCollection> GetOrCreateDocumentCollectionIfNotExists()
+        //{
+        //    Database database = await connection.GetOrCreateDatabaseIfNotExists();
+        //    documentCollection = await documentClient
+        //        .CreateDocumentCollectionIfNotExistsAsync(database.SelfLink,
+        //        new DocumentCollection { Id = collectionName });
+        //    return documentCollection;
+        //}
 
         #region _private        
 

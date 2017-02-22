@@ -1,7 +1,5 @@
-﻿using Microsoft.Azure.Documents;
-using Microsoft.Azure.Documents.Client;
+﻿using Microsoft.Azure.Documents.Client;
 using System;
-using System.Threading.Tasks;
 
 namespace Canducci.DocumentDB
 {
@@ -19,10 +17,10 @@ namespace Canducci.DocumentDB
             DatabaseName = database;         
         }        
 
-        public async Task<Database> GetOrCreateDatabaseIfNotExists()
-        {
-            return await Client.CreateDatabaseIfNotExistsAsync(new Database { Id = DatabaseName });
-        }
+        //public async Task<Database> GetOrCreateDatabaseIfNotExists()
+        //{
+        //    return await Client.CreateDatabaseIfNotExistsAsync(new Database { Id = DatabaseName });
+        //}
 
         public void Dispose()
         {
