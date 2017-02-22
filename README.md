@@ -28,7 +28,7 @@ Configure a classe `ConnectionDocumentDB` que tem um construtor com três paramen
 string url = "https://localhost:8081/";
 string key = "C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw==";
 string database = "database";
-ConnectionDocumentDB _db = new ConnectionDocumentDB(url, key, database);
+ConnectionDocumentDB db = new ConnectionDocumentDB(url, key, database);
 ```
 
 Apos configurar a classe, precisamos criar uma classe que represente o __modelo da coleção__ e sua respectiva classe `respository`.

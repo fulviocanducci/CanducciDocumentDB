@@ -1,0 +1,229 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>Canducci DocumentDB Repository</title>
+</head>
+<body>
+
+    <h2 id="canducci-documentdb-repository">Canducci DocumentDB Repository</h2>
+<p><a href="https://www.nuget.org/packages/CanducciDocumentDB/"><img src="https://buildstats.info/nuget/CanducciDocumentDB" alt="NuGet Badge" /></a></p>
+<p><a href="https://www.nuget.org/packages/CanducciDocumentDB/"><img src="http://i682.photobucket.com/albums/vv181/parapua/1487622555_database-px-png_zpsqh2d6d60.png" alt="Canducci Excel" /></a></p>
+<h3 id="instalao">Instala��o:</h3>
+<p>A instala��o pode ser feito pelo <a href="https://docs.microsoft.com/en-us/nuget/tools/package-manager-console">Package Manager Console</a></p>
+<pre><code class="language-csharp">PM&gt; Install-Package CanducciDocumentDB
+</code></pre>
+<p>ou ent�o <a href="https://www.nuget.org/packages/CanducciDocumentDB/">Nuget</a></p>
+<h3 id="configuraes">Configura��es:</h3>
+<p>Configure a classe <code>ConnectionDocumentDB</code> que tem um construtor com tr�s paramentros:</p>
+<blockquote>
+<ul>
+<li>url</li>
+<li>key</li>
+<li>database</li>
+</ul>
+</blockquote>
+<h5 id="cdigo">C�digo:</h5>
+<pre><code class="language-csharp">string url = &quot;https://localhost:8081/&quot;;
+string key = &quot;C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw==&quot;;
+string database = &quot;database&quot;;
+ConnectionDocumentDB db = new ConnectionDocumentDB(url, key, database);
+</code></pre>
+<p>Apos configurar a classe, precisamos criar uma classe que represente o <strong>modelo da cole��o</strong> e sua respectiva classe <code>respository</code>.</p>
+<h5 id="cdigo-modelo-para-coleo">C�digo modelo para cole��o:</h5>
+<pre><code class="language-csharp">public class Credit
+{
+    [JsonProperty(PropertyName = &quot;id&quot;)]
+    public string Id { get; set; }
+
+    [JsonProperty(PropertyName = &quot;description&quot;)]
+    [Required(ErrorMessage = &quot;Digite a descri��o ...&quot;)]
+    public string Description { get; set; }
+}
+</code></pre>
+<p><strong>Observa��o:</strong> a classe <code>Credit</code> foi decorada com <code>JsonProperty</code> atributo que vem do pacote <a href="https://www.nuget.org/packages/Newtonsoft.Json/">Newtonsoft.Json</a>,
+item j� instalado quando � instalado esse pacote <a href="https://www.nuget.org/packages/CanducciDocumentDB/">Canducci DocumentDB</a></p>
+<h5 id="cdigo-da-repository">C�digo da <code>Repository</code>:</h5>
+<p>A classe <code>abstract</code> <code>RepositoryCreditAbstract</code> que herda de <code>Repository</code> e <code>IRepository</code> como contrato, tem um construtor com a classe <code>ConnectionDocumentDB db</code> e � chamado a sua base para a passagem da vari�vel <code>db</code> e o nome da cole��o que no caso � <code>credit</code>.</p>
+<pre><code class="language-csharp">public abstract class RepositoryCreditAbstract: Repository&lt;Credit&gt;, IRepository&lt;Credit&gt;
+{
+    public RepositoryCreditAbstract(ConnectionDocumentDB db)
+        : base(db, &quot;credit&quot;)
+    {
+    }
+}
+</code></pre>
+<p>A classe <code>concret</code> <code>RepositoryCredit</code> herda de <code>RepositoryCreditAbstract</code> e tamb�m possui um <code>construtor</code> com a classe <code>ConnectionDocumentDB db</code> e chama a sua base para a passagem da vari�vel <code>db</code>, n�o precisando passar o segundo parametro ato feito na classe <code>abstract</code> <code>RepositoryCreditAbstract</code>.</p>
+<pre><code class="language-csharp">public class RepositoryCredit: RepositoryCreditAbstract
+{
+    public RepositoryCredit(ConnectionDocumentDB db)
+        : base(db)
+    {
+    }
+} 
+</code></pre>
+<p>Com a codifica��o dessas classes, permite a grava��o dessa cole��o configurada (vale lembrar que a cria��o do <code>DatabaseId</code> e <code>CollectionId</code> e manual, ent�o, entre no Azure e configure essas duas informa��es), onde a estrutura possui os seguintes m�todos:</p>
+<ul>
+<li><strong>Inserir cole��o</strong></li>
+</ul>
+<pre><code class="language-csharp">ConnectionDocumentDB db = new ConnectionDocumentDB(url, key, database);
+RepositoryCreditAbstract rep = new RepositoryCredit(db);
+Credit credit = new Credit { Description = &quot;Matem�tica&quot; };
+credit = await rep.InsertAsync(credit);
+</code></pre>
+<ul>
+<li><strong>Atualizar cole��o</strong></li>
+</ul>
+<pre><code class="language-csharp">ConnectionDocumentDB db = new ConnectionDocumentDB(url, key, database);
+RepositoryCreditAbstract rep = new RepositoryCredit(db);
+
+Credit credit = await rep.FindAsync(&quot;d70e21fd-b9e3-430b-a934-778ce3a871b3&quot;);
+credit.Description = &quot;Hist�ria&quot;;
+await rep.UpdateAsync(credit);
+</code></pre>
+<ul>
+<li><strong>Excluir uma cole��o</strong></li>
+</ul>
+<pre><code class="language-csharp">ConnectionDocumentDB db = new ConnectionDocumentDB(url, key, database);
+RepositoryCreditAbstract rep = new RepositoryCredit(db);
+
+await rep.DeleteAsync(&quot;d70e21fd-b9e3-430b-a934-778ce3a871b3&quot;);
+</code></pre>
+<ul>
+<li><strong>Trazer uma cole��o pelo <code>Id</code></strong></li>
+</ul>
+<pre><code class="language-csharp">ConnectionDocumentDB db = new ConnectionDocumentDB(url, key, database);
+RepositoryCreditAbstract rep = new RepositoryCredit(db);
+
+Credit credit = await rep.FindAsync(&quot;d70e21fd-b9e3-430b-a934-778ce3a871b3&quot;);
+</code></pre>
+<ul>
+<li><strong>Trazer todos as cole��es</strong></li>
+</ul>
+<pre><code class="language-csharp">ConnectionDocumentDB db = new ConnectionDocumentDB(url, key, database);
+RepositoryCreditAbstract rep = new RepositoryCredit(db);
+
+IEnumerable&lt;Credit&gt; creditList = await rep.AllAsync();
+</code></pre>
+<hr />
+<h3 id="web-asp.net">Web ASP.Net</h3>
+<p>Para configurar um aplica��o <code>Web</code>, � utilizado o <a href="https://www.nuget.org/packages/Ninject.MVC5/">Ninject.MVC5</a>, que ao final da instala��o do seu pacote ter� um classe a ser configurada na pasta <code>App_Start</code> no arquivo <code>NinjectWebCommon.cs</code>.</p>
+<p>No m�todo <code>void RegisterServices(IKernel kernel)</code> fa�a:</p>
+<pre><code class="language-csharp">private static void RegisterServices(IKernel kernel)
+{
+    kernel.Bind&lt;ConnectionDocumentDB&gt;()                
+        .ToSelf()
+        .WithConstructorArgument(&quot;url&quot;, ConfigurationManager.AppSettings[&quot;url&quot;])
+        .WithConstructorArgument(&quot;key&quot;, ConfigurationManager.AppSettings[&quot;key&quot;])
+        .WithConstructorArgument(&quot;database&quot;, ConfigurationManager.AppSettings[&quot;database&quot;]);
+
+    kernel.Bind&lt;RepositoryCarAbstract&gt;().To&lt;RepositoryCar&gt;();
+    kernel.Bind&lt;RepositoryCreditAbstract&gt;().To&lt;RepositoryCredit&gt;();
+}
+</code></pre>
+<p><strong>Observa��o:</strong> foi configurado dentro do <code>Web.config</code> na chave <code>appSettings</code> as configura��es de conex�o, segue abaixo:</p>
+<pre><code class="language-xml">&lt;appSettings&gt;
+    ...
+ &lt;add key=&quot;url&quot; value=&quot;https://localhost:8081/&quot;/&gt;
+ &lt;add key=&quot;key&quot; value=&quot;C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw==&quot;/&gt;
+ &lt;add key=&quot;database&quot; value=&quot;Todo&quot;/&gt;
+&lt;/appSettings&gt;
+</code></pre>
+<p>Feito isso a sua aplica��o <code>Web</code> est� preparada para receber <strong>Inje��o de Dependencia</strong>, como por exemplo esse <code>controller</code>:</p>
+<pre><code class="language-csharp">public class CreditsController : Controller
+{
+    protected RepositoryCreditAbstract Repository { get; private set; }
+
+    public CreditsController(RepositoryCreditAbstract repository)
+    {
+        Repository = repository;
+    }
+    
+    public async Task&lt;ActionResult&gt; Index(int? page)
+    {
+        return View(await Repository.AllAsync());
+    }
+                
+    public async Task&lt;ActionResult&gt; Details(string id)
+    {            
+        return View(await Repository.FindAsync(id));
+    }
+
+    public ActionResult Create()
+    {
+        return View();
+    }
+                
+    [HttpPost]
+    public async Task&lt;ActionResult&gt; Create(Credit credit)
+    {
+        try
+        {
+            credit = await Repository.InsertAsync(credit);
+            if (string.IsNullOrEmpty(credit.Id))
+                return RedirectToAction(&quot;Index&quot;);
+            return RedirectToAction(&quot;Edit&quot;, new { id = credit.Id });
+        }
+        catch
+        {
+            return View();
+        }
+    }
+
+    public async Task&lt;ActionResult&gt; Edit(string id)
+    {
+        return View(await Repository.FindAsync(id));
+    }
+
+    [HttpPost]
+    public async Task&lt;ActionResult&gt; Edit(string id, Credit credit)
+    {
+        try
+        {
+            await Repository.UpdateAsync(credit, id);
+            return RedirectToAction(&quot;Edit&quot;, new { id = credit.Id });
+        }
+        catch
+        {
+            return View();
+        }
+    }
+        
+    public async Task&lt;ActionResult&gt; Delete(string id)
+    {
+        return View(await Repository.FindAsync(id));
+    }
+
+    [HttpPost]
+    public async Task&lt;ActionResult&gt; Delete(string id, Credit credit)
+    {
+        try
+        {
+            await Repository.DeleteAsync(id);
+            return RedirectToAction(&quot;Index&quot;);
+        }
+        catch
+        {
+            return View();
+        }
+    }
+}
+</code></pre>
+<p>A partir desse ponto gere todas as <code>Views</code> respectivas de cada m�todo, onde o mesmo possibilitar� as opera��es de <code>CRUD</code> para essa cole��o.</p>
+<p>Um exemplo de um registro gravado dessa cole��o:</p>
+<pre><code class="language-xml">{
+    &quot;id&quot;: &quot;d70e21fd-b9e3-430b-a934-778ce3a871b3&quot;,
+    &quot;title&quot;: &quot;LINGUA PORTUGUESA&quot;,
+    &quot;value&quot;: 200,
+    &quot;created&quot;: &quot;2015-02-28T00:00:00&quot;,
+    &quot;active&quot;: true,
+    &quot;_rid&quot;: &quot;aFh5AITdaQABAAAAAAAAAA==&quot;,
+    &quot;_self&quot;: &quot;dbs/aFh5AA==/colls/aFh5AITdaQA=/docs/aFh5AITdaQABAAAAAAAAAA==/&quot;,
+    &quot;_etag&quot;: &quot;\&quot;00001400-0000-0000-0000-58ab120e0000\&quot;&quot;,
+    &quot;_attachments&quot;: &quot;attachments/&quot;,
+    &quot;_ts&quot;: 1487606286
+}
+</code></pre>
+
+
+</body>
+</html>
