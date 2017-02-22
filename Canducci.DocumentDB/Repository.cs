@@ -13,41 +13,44 @@ namespace Canducci.DocumentDB
         where T : class, new()
     {
 
-        protected ConnectionDocumentDB _connection { get; private set; }        
-        protected DocumentClient _doc { get; private set; }
-        protected string _collectionName { get; private set; }
+        private ConnectionDocumentDB connection { get; set; }
+        private DocumentClient documentClient { get; set; }
+        private DocumentCollection documentCollection { get; set; }
+        private string collectionName { get; set; }
 
         public Repository(ConnectionDocumentDB connection)
         {
-            Initialize(connection);
+            Initialize(connection);            
         }
 
         public Repository(ConnectionDocumentDB connection, string collectionName)
         {
+            this.collectionName = collectionName;
             Initialize(connection);
-            _collectionName = collectionName;            
         }
 
         public async Task<T> InsertAsync(T document)
-        {            
-           ResourceResponse<Document> result = 
-                await _doc.CreateDocumentAsync(GetDocumentUri(),document);
+        {
+            ResourceResponse<Document> result =
+                 await documentClient.CreateDocumentAsync(GetDocumentUri(), document);
+
             return (T)(dynamic)result.Resource;
         }
 
         public async Task<ResourceResponse<Document>> UpdateAsync(T document, string id)
         {
-            return await _doc.ReplaceDocumentAsync(GetDocumentCreateUri(id), document);
+            return await documentClient.ReplaceDocumentAsync(GetDocumentCreateUri(id), document);
         }
 
         public async Task<ResourceResponse<Document>> DeleteAsync(string id)
         {
-            return await _doc.DeleteDocumentAsync(GetDocumentCreateUri(id));
+            return await documentClient.DeleteDocumentAsync(GetDocumentCreateUri(id));
         }
 
         public async Task<T> FindAsync(string id)
         {
-            Document doc = await _doc.ReadDocumentAsync(GetDocumentCreateUri(id));
+            Document doc = await documentClient.ReadDocumentAsync(GetDocumentCreateUri(id));
+
             return (T)((dynamic)doc);
         }
 
@@ -62,6 +65,7 @@ namespace Canducci.DocumentDB
             IDocumentQuery<T> docQuery = GetOrderedQueryable()
                 .Where(where)
                 .AsDocumentQuery();
+
             return await GetAllListAsync(docQuery);
         }
 
@@ -71,6 +75,7 @@ namespace Canducci.DocumentDB
                 .Where(where)
                 .OrderBy(orderBy)
                 .AsDocumentQuery();
+
             return await GetAllListAsync(docQuery);
         }
 
@@ -81,6 +86,7 @@ namespace Canducci.DocumentDB
                 .OrderBy(orderBy)
                 .Select(select)
                 .AsDocumentQuery();
+
             return await GetAllListAsync(docQuery);
         }
 
@@ -89,19 +95,26 @@ namespace Canducci.DocumentDB
             return GetOrderedQueryable();
         }
 
-        #region _private
-
-        private void Initialize(ConnectionDocumentDB connection)
+        public async Task<DocumentCollection> GetOrCreateDocumentCollectionIfNotExists()
         {
-            _connection = connection;
-            _doc = _connection.Client;
+            Database database = await connection.GetOrCreateDatabaseIfNotExists();
+            documentCollection = await documentClient
+                .CreateDocumentCollectionIfNotExistsAsync(database.SelfLink,
+                new DocumentCollection { Id = collectionName });
+            return documentCollection;
+        }
+
+        #region _private        
+
+        private void Initialize(ConnectionDocumentDB conn)
+        {
+            connection = conn;
+            documentClient = connection.Client;
         }
 
         private IOrderedQueryable<T> GetOrderedQueryable()
         {
-            return _doc
-                 .CreateDocumentQuery<T>(GetDocumentUri(),
-                 new FeedOptions { MaxItemCount = -1 });                 
+            return documentClient.CreateDocumentQuery<T>(GetDocumentUri(), new FeedOptions { MaxItemCount = -1 });                 
         }
 
         private async Task<IEnumerable<TDocument>> GetAllListAsync<TDocument>(IDocumentQuery<TDocument> docQuery)
@@ -109,25 +122,24 @@ namespace Canducci.DocumentDB
             List<TDocument> _list = new List<TDocument>();
             while (docQuery.HasMoreResults)
             {
-                _list.AddRange(await docQuery
-                    .ExecuteNextAsync<TDocument>());
+                _list.AddRange(await docQuery.ExecuteNextAsync<TDocument>());
             }
-            return _list.Count == 0 ? null : _list;
+            return _list;
+        }
+
+        private Uri GetDatabaseUri()
+        {
+            return UriFactory.CreateDatabaseUri(connection.DatabaseName);
         }
 
         private Uri GetDocumentUri()
         {
-            return UriFactory
-                 .CreateDocumentCollectionUri(_connection.DatabaseName, 
-                 _collectionName);
+            return UriFactory.CreateDocumentCollectionUri(connection.DatabaseName, collectionName);
         }
 
         private Uri GetDocumentCreateUri(string id)
         {
-            return UriFactory
-                .CreateDocumentUri(_connection.DatabaseName, 
-                _collectionName, 
-                id);
+            return UriFactory.CreateDocumentUri(connection.DatabaseName, collectionName, id);
         }        
 
         #endregion
@@ -135,14 +147,14 @@ namespace Canducci.DocumentDB
         #region dispose 
         public void Dispose()
         {
-            if (_doc != null)
+            if (documentClient != null)
             {
-                _doc.Dispose();
-                _doc = null;
+                documentClient.Dispose();
+                documentClient = null;
             }
         }
         
-        #endregion
+        #endregion dispose
 
     }
 }

@@ -9,7 +9,7 @@ namespace Canducci.Web.Controllers
 
         public CreditsController(RepositoryCreditAbstract repository)
         {
-            Repository = repository;
+            Repository = repository;            
         }
         protected override void Dispose(bool disposing)
         {
@@ -19,6 +19,7 @@ namespace Canducci.Web.Controllers
         
         public async Task<ActionResult> Index(int? page)
         {
+            await Repository.GetOrCreateDocumentCollectionIfNotExists();
             return View(await Repository.AllAsync());
         }
                 
